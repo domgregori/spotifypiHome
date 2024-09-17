@@ -58,30 +58,29 @@ done
 
 # raspotify setup
 if $INSTALL_RASPOTIFY; then
-  OPTIONS_VALUE="--device /run/snapserver/snapfifo_raspotify"
-  BACKEND_ARGS_VALUE="--backend pipe"
+  OPTIONS_VALUE="/run/snapserver/snapfifo_raspotify"
+  BACKEND_ARGS_VALUE="pipe"
 
-  RASPOTIFY_FILE="/etc/default/raspotify"
+  RASPOTIFY_FILE="/etc/raspotify/conf"
 
   echo -e "\n${GREEN}installing raspotify...${NC}"
   sudo apt-get -y install curl && curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
 
   echo -e "\n${LIGHT_BLUE}configuring raspotify...${NC}"
 
-  OPTIONS_CONF="OPTIONS=\"${OPTIONS_VALUE}\""
-  BACKEND_CONF="BACKEND_ARGS=\"${BACKEND_ARGS_VALUE}\""
-  DEVICE_NAME_CONF="DEVICE_NAME=\"${DEVICE_NAME}\""
-  grep -q -e "^${OPTIONS_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#OPTIONS=/a ${OPTIONS_CONF}" "${RASPOTIFY_FILE}"
-  grep -q -e "^${BACKEND_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#BACKEND_ARGS=/a ${BACKEND_CONF}" "${RASPOTIFY_FILE}"
-  grep -q -e "^${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#DEVICE_NAME=/a ${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}"
+  OPTIONS_CONF="LIBRESPOT_DEVICE=\"${OPTIONS_VALUE}\""
+  BACKEND_CONF="LIBRESPOT_BACKEND=\"${BACKEND_ARGS_VALUE}\""
+  DEVICE_NAME_CONF="LIBRESPOT_NAME=\"${DEVICE_NAME}\""
+  grep -q -e "^${OPTIONS_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_DEVICE=/a ${OPTIONS_CONF}" "${RASPOTIFY_FILE}"
+  grep -q -e "^${BACKEND_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_BACKEND=/a ${BACKEND_CONF}" "${RASPOTIFY_FILE}"
+  grep -q -e "^${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_NAME=/a ${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}"
 fi
 
 # shairport setup
 if $INSTALL_SHAIRPORT; then
-  SHAIRPORT_VERSION="3.3.8"
   echo -e "\n${YELLOW}building shairport-sync...${NC}"
-  curl -sL https://github.com/mikebrady/shairport-sync/archive/$SHAIRPORT_VERSION.tar.gz | tar xz
-  cd shairport-sync-$SHAIRPORT_VERSION/
+  git clone git clone https://github.com/mikebrady/shairport-sync.git shairport-sync
+  cd shairport-sync
   autoreconf -i -f
   ./configure 'CFLAGS=-O3' 'CXXFLAGS=-O3' --sysconfdir=/etc --with-pipe --with-systemd --with-avahi --with-ssl=openssl
   make
@@ -94,7 +93,7 @@ if $INSTALL_SHAIRPORT; then
 
   echo -e "\n${LIGHT_BLUE}configuring shairport-sync...${NC}"
   sudo cp ./etc/shairport-sync.conf /etc/shairport-sync.conf
-  sed -i "s/<DEVICE_NAME>/$DEVICE_NAME/" /etc/shairport-sync.conf
+  sudo sed -i "s/<DEVICE_NAME>/$DEVICE_NAME/" /etc/shairport-sync.conf
 fi
 
 # bluetooth setup
