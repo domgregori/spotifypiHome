@@ -71,9 +71,11 @@ if $INSTALL_RASPOTIFY; then
   OPTIONS_CONF="LIBRESPOT_DEVICE=\"${OPTIONS_VALUE}\""
   BACKEND_CONF="LIBRESPOT_BACKEND=\"${BACKEND_ARGS_VALUE}\""
   DEVICE_NAME_CONF="LIBRESPOT_NAME=\"${DEVICE_NAME}\""
-  grep -q -e "^${OPTIONS_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_DEVICE=/a ${OPTIONS_CONF}" "${RASPOTIFY_FILE}"
-  grep -q -e "^${BACKEND_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_BACKEND=/a ${BACKEND_CONF}" "${RASPOTIFY_FILE}"
-  grep -q -e "^${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_NAME=/a ${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}"
+  sudo grep -q -e "^${OPTIONS_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_DEVICE=/a ${OPTIONS_CONF}" "${RASPOTIFY_FILE}"
+  sudo grep -q -e "^${BACKEND_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_BACKEND=/a ${BACKEND_CONF}" "${RASPOTIFY_FILE}"
+  sudo grep -q -e "^${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}" || sudo sed -i "/#LIBRESPOT_NAME=/a ${DEVICE_NAME_CONF}" "${RASPOTIFY_FILE}"
+  # Stop writes to SD card
+  sudo grep -q -e "^#TMPDIR=" "/etc/raspotify/conf" || sudo sed -i "s/TMPDIR=/#TMPDIR=/g" "/etc/raspotify/conf"
 fi
 
 # shairport setup
