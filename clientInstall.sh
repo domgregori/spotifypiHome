@@ -45,7 +45,9 @@ done
 # snapclient setup
 
 echo -e "\n${GREEN}installing snapcast client...${NC}"
-curl -k -L https://github.com/badaix/snapcast/releases/download/v0.25.0/snapclient_0.25.0-1_without-pulse_armhf.deb -o 'snapclient.deb' &&
+NEWEST_RELEASE=$(curl https://api.github.com/repos/badaix/snapcast/releases -s | jq -r '.[].tag_name' | head -n1 | sed 's/v//')
+DEBIAN_RELEASE=$(awk -F'[" ]' '/VERSION=/{print $3}'  /etc/os-release | tr -cd '[[:alnum:]]._-' )
+curl -k -L "https://github.com/badaix/snapcast/releases/download/v${NEWEST_RELEASE}/snapclient_${NEWEST_RELEASE}-1_armhf_${DEBIAN_RELEASE}.deb" -o 'snapclient.deb' &&
 sudo apt install ./snapclient.deb -y
 sudo rm -f snapclient.deb
 
