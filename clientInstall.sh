@@ -44,10 +44,16 @@ done
 
 # snapclient setup
 
+if [[ "$(getconf LONG_BIT)" == "32" ]]; then
+  ARM_ARCH=armhf
+else
+  ARM_ARCH=arm64
+fi
+
 echo -e "\n${GREEN}installing snapcast client...${NC}"
 NEWEST_RELEASE=$(curl https://api.github.com/repos/badaix/snapcast/releases -s | jq -r '.[].tag_name' | head -n1 | sed 's/v//')
 DEBIAN_RELEASE=$(awk -F'[" ]' '/VERSION=/{print $3}'  /etc/os-release | tr -cd '[[:alnum:]]._-' )
-curl -k -L "https://github.com/badaix/snapcast/releases/download/v${NEWEST_RELEASE}/snapclient_${NEWEST_RELEASE}-1_armhf_${DEBIAN_RELEASE}.deb" -o 'snapclient.deb' &&
+curl -k -L "https://github.com/badaix/snapcast/releases/download/v${NEWEST_RELEASE}/snapclient_${NEWEST_RELEASE}-1_${ARM_ARCH}_${DEBIAN_RELEASE}.deb" -o 'snapclient.deb' &&
 sudo apt install ./snapclient.deb -y
 sudo rm -f snapclient.deb
 
