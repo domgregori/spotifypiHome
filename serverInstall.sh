@@ -115,6 +115,25 @@ fi
 
 # snapserver setup
 echo -e "\n${GREEN}installing snapcast server...${NC}"
+
+if [[ "$(getconf LONG_BIT)" == "32" ]]; then
+  ARM_ARCH=armhf
+else
+  ARM_ARCH=arm64
+fi
+
+NEWEST_RELEASE=$(curl https://api.github.com/repos/badaix/snapcast/releases -s | jq -r '.[].tag_name' | head -n1 | sed 's/v//')
+DEBIAN_RELEASE=$(awk -F'[" ]' '/VERSION=/{print $3}'  /etc/os-release | tr -cd '[[:alnum:]]._-' )
+curl -k -L "https://github.com/badaix/snapcast/releases/download/v${NEWEST_RELEASE}/snapserver_${NEWEST_RELEASE}-1_${ARM_ARCH}_${DEBIAN_RELEASE}.deb" -o 'snapserver.deb' &&
+sudo apt install ./snapserver.deb -y
+sudo rm -f snapserver.deb
+
+
+
+
+
+
+
 curl -k -L https://github.com/badaix/snapcast/releases/download/v0.25.0/snapserver_0.25.0-1_armhf.deb -o 'snapserver.deb' &&
 sudo apt install ./snapserver.deb -y
 rm -f snapserver.deb
