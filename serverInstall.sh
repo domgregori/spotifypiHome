@@ -81,7 +81,7 @@ fi
 # shairport setup
 if $INSTALL_SHAIRPORT; then
   echo -e "\n${YELLOW}building shairport-sync...${NC}"
-  git clone git clone https://github.com/mikebrady/shairport-sync.git shairport-sync
+  git clone https://github.com/mikebrady/shairport-sync.git shairport-sync
   cd shairport-sync
   autoreconf -i -f
   ./configure 'CFLAGS=-O3' 'CXXFLAGS=-O3' --sysconfdir=/etc --with-pipe --with-systemd --with-avahi --with-ssl=openssl
