@@ -2,7 +2,7 @@
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
 
-sudo apt install -y --no-install-recommends bluealsa
+sudo apt install -y --no-install-recommends bluez-alsa-utils
 bash config-bluetooth.sh "$1"
 
 cp pihome-stream-fifo-to-server /usr/local/bin/pihome-stream-fifo-to-server
