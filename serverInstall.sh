@@ -81,7 +81,8 @@ fi
 # shairport setup
 if $INSTALL_SHAIRPORT; then
   echo -e "\n${YELLOW}Installing dependencies...${NC}"
-  sudo apt update && sudo apt install -y autoconf automake libtool libdaemon-dev libpopt-dev libconfig-dev libssl-dev avahi-daemon libavahi-client-dev libsndfile1-dev
+  sudo apt update && sudo apt install -y --no-install-recommends build-essential git autoconf automake libtool libpopt-dev libconfig-dev libasound2-dev avahi-daemon libavahi-client-dev libssl-dev libsoxr-dev
+
   echo -e "\n${YELLOW}building shairport-sync...${NC}"
   git clone https://github.com/mikebrady/shairport-sync.git shairport-sync
   cd shairport-sync
@@ -93,7 +94,7 @@ if $INSTALL_SHAIRPORT; then
   sudo make install
   cd ..
   rm -r shairport-sync/
-  sudo systemctl enable shairport-sync
+  sudo systemctl enable --now shairport-sync
 
   echo -e "\n${LIGHT_BLUE}configuring shairport-sync...${NC}"
   sudo cp ./etc/shairport-sync.conf /etc/shairport-sync.conf
@@ -129,16 +130,6 @@ fi
 NEWEST_RELEASE=$(curl https://api.github.com/repos/badaix/snapcast/releases -s | jq -r '.[].tag_name' | head -n1 | sed 's/v//')
 DEBIAN_RELEASE=$(awk -F'[" ]' '/VERSION=/{print $3}'  /etc/os-release | tr -cd '[[:alnum:]]._-' )
 curl -k -L "https://github.com/badaix/snapcast/releases/download/v${NEWEST_RELEASE}/snapserver_${NEWEST_RELEASE}-1_${ARM_ARCH}_${DEBIAN_RELEASE}.deb" -o 'snapserver.deb' &&
-sudo apt install ./snapserver.deb -y
-sudo rm -f snapserver.deb
-
-
-
-
-
-
-
-curl -k -L https://github.com/badaix/snapcast/releases/download/v0.25.0/snapserver_0.25.0-1_armhf.deb -o 'snapserver.deb' &&
 sudo apt install ./snapserver.deb -y
 rm -f snapserver.deb
 
