@@ -43,8 +43,16 @@ else
 fi
 
 if command -v bluealsa-aplay &> /dev/null; then
-	echo -e "\n${ORANGE}removing* ${LIGHT_BLUE}bluealsa${NC}"
-	sudo apt remove --purge bluealsa -y
+	echo -e "\n${ORANGE}removing* ${LIGHT_BLUE}BluezAlsa${NC}"
+	#sudo apt remove --purge bluealsa -y
+	echo -e "\n${WHITE}building ${LIGHT_BLUE}BluezAlsa${WHITE} makefile${NC}"
+	git clone https://github.com/arkq/bluez-alsa.git
+	cd bluez-alsa
+	autoreconf -i -f
+	./configure --sysconfdir=/etc --enable-systemd
+	echo -e "\n${YELLOW}runing make uninstall for ${LIGHT_BLUE}BluezAlsa${NC}"
+	sudo make uninstall
+	rm -r bluez-alsa
 	sudo rm -r /etc/systemd/system/bthelper@.service.d
 	sudo mv /etc/bluetooth/main.conf.custom_bak  /etc/bluetooth/main.conf
 	sudo mv /etc/systemd/system/bt-agent.service.custom_bak /etc/systemd/system/bt-agent.service
