@@ -103,19 +103,28 @@ fi
 
 # bluetooth setup
 if $INSTALL_BLUETOOTH; then
-  echo -e "\n${YELLOW}Installing dependencies...${NC}"
-  sudo apt update && sudo apt install -y --no-install-recommends bluez-alsa-utils
-  if ! command -v bluealsa &> /dev/null; then
-    echo -e "\n${RED}bluealsa could not be found${NC}"
-    echo -e "${LIGHT_GRAY}skipping bluetooth instalation${NC}"
-    INSTALL_BLUETOOTH=false
-  else
-    echo -e "\n${LIGHT_BLUE}configuring BlueAlsa...${NC}"
-    bash ./scripts/config-bluetooth.sh "$DEVICE_NAME"
-    mkdir -p /usr/local/share/sounds/bluetooth/
-    cp ./files/bt-device-connected.wav /usr/local/share/sounds/bluetooth/device-connected.wav
-    cp ./files/bt-device-disconnected.wav /usr/local/share/sounds/bluetooth/device-disconnected.wav
+
+  if ! command -v bluealsad &> /dev/null; then
+    echo -e "\n${YELLOW}bluealsa could not be found${NC}"
+    echo -e "\n${LIGHT_BLUE}Building BluezAlsa${NC}"
+    echo -e "\n${YELLOW}Installing dependencies...${NC}"
+    sudo apt update && sudo apt-get install -y git automake build-essential libtool pkg-config python3-docutils libasound2-dev libbluetooth-dev libdbus-1-dev libglib2.0-dev libsbc-dev
+    git clone https://github.com/arkq/bluez-alsa.git bluez-alsa
+    cd bluez-alsa
+    autoreconf -i -f
+    ./configure --enable-systemd --sysconfdir=/etc
+    make
+    sudo make install
+    cd ..
+    rm -rf bluez-alsa
+
   fi
+
+  echo -e "\n${LIGHT_BLUE}configuring BlueAlsa...${NC}"
+  bash ./scripts/config-bluetooth.sh "$DEVICE_NAME"
+  mkdir -p /usr/local/share/sounds/bluetooth/
+  cp ./files/bt-device-connected.wav /usr/local/share/sounds/bluetooth/device-connected.wav
+  cp ./files/bt-device-disconnected.wav /usr/local/share/sounds/bluetooth/device-disconnected.wav
 fi
 
 # snapserver setup
