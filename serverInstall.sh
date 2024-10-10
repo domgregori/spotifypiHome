@@ -80,6 +80,8 @@ fi
 
 # shairport setup
 if $INSTALL_SHAIRPORT; then
+  echo -e "\n${YELLOW}Installing dependencies...${NC}"
+  sudo apt update && sudo apt install autoconf automake libtool libdaemon-dev libpopt-dev libconfig-dev libssl-dev avahi-daemon libavahi-client-dev libsndfile1-dev
   echo -e "\n${YELLOW}building shairport-sync...${NC}"
   git clone https://github.com/mikebrady/shairport-sync.git shairport-sync
   cd shairport-sync
@@ -100,6 +102,8 @@ fi
 
 # bluetooth setup
 if $INSTALL_BLUETOOTH; then
+  echo -e "\n${YELLOW}Installing dependencies...${NC}"
+  sudo apt update && sudo apt install bluez-alsa-utils
   if ! command -v bluealsa &> /dev/null; then
     echo -e "\n${RED}bluealsa could not be found${NC}"
     echo -e "${LIGHT_GRAY}skipping bluetooth instalation${NC}"
