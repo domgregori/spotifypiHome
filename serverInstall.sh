@@ -81,7 +81,7 @@ fi
 # shairport setup
 if $INSTALL_SHAIRPORT; then
   echo -e "\n${YELLOW}Installing dependencies...${NC}"
-  sudo apt update && sudo apt install autoconf automake libtool libdaemon-dev libpopt-dev libconfig-dev libssl-dev avahi-daemon libavahi-client-dev libsndfile1-dev
+  sudo apt update && sudo apt install -y autoconf automake libtool libdaemon-dev libpopt-dev libconfig-dev libssl-dev avahi-daemon libavahi-client-dev libsndfile1-dev
   echo -e "\n${YELLOW}building shairport-sync...${NC}"
   git clone https://github.com/mikebrady/shairport-sync.git shairport-sync
   cd shairport-sync
