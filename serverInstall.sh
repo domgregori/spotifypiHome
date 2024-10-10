@@ -103,7 +103,7 @@ fi
 # bluetooth setup
 if $INSTALL_BLUETOOTH; then
   echo -e "\n${YELLOW}Installing dependencies...${NC}"
-  sudo apt update && sudo apt install bluez-alsa-utils
+  sudo apt update && sudo apt install -y --no-install-recommends bluez-alsa-utils
   if ! command -v bluealsa &> /dev/null; then
     echo -e "\n${RED}bluealsa could not be found${NC}"
     echo -e "${LIGHT_GRAY}skipping bluetooth instalation${NC}"
