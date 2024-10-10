@@ -90,7 +90,7 @@ if $INSTALL_SHAIRPORT; then
   echo -e "\n${GREEN}installing shairport-sync...${NC}"
   sudo make install
   cd ..
-  rm -r shairport-sync-$SHAIRPORT_VERSION/
+  rm -r shairport-sync/
   sudo systemctl enable shairport-sync
 
   echo -e "\n${LIGHT_BLUE}configuring shairport-sync...${NC}"
