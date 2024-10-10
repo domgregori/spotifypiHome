@@ -31,18 +31,18 @@ mkdir -p /etc/systemd/system/bthelper@.service.d
 cat <<'EOF' > /etc/systemd/system/bthelper@.service.d/override.conf
 [Service]
 Type=oneshot
-ExecStartPost=/usr/bin/bluetoothctl discoverable on
-ExecStartPost=/bin/hciconfig %I piscan
-ExecStartPost=/bin/hciconfig %I sspmode 1
 EOF
 
 cp -n /etc/systemd/system/bt-agent.service /etc/systemd/system/bt-agent.service.custom_bak 2>/dev/null
-cat <<'EOF' > /etc/systemd/system/bt-agent.service
+cat <<'EOF' > /etc/systemd/system/bt-agent@.service
 [Unit]
 Description=Bluetooth Agent
 Requires=bluetooth.service
 After=bluetooth.service
 [Service]
+ExecStartPre=/usr/bin/bluetoothctl discoverable on
+ExecStartPre=/bin/hciconfig %I piscan
+ExecStartPre=/bin/hciconfig %I sspmode 1
 ExecStart=/usr/bin/bt-agent --capability=NoInputNoOutput
 RestartSec=5
 Restart=always
