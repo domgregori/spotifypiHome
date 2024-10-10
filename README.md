@@ -1,3 +1,6 @@
+# Work in progress - Slowly updating scripts
+Not functining yet
+
 # spotifypiHome
 A multiroom audio/music playback, with **spotify connect**, **airplay** and **bluetooth** support, using snapcast for the 'multiroom synchornization' part.\
 note: even if it is a multiroom solution, you can use it as unique room playback device, with no problems.
