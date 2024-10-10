@@ -50,7 +50,7 @@ KillSignal=SIGUSR1
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable bt-agent.service
+systemctl enable --now bt-agent@hci0.service
 
 # ALSA settings
 cp -n /lib/modprobe.d/aliases.conf /lib/modprobe.d/aliases.conf.custom_bak
@@ -110,7 +110,7 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 systemctl daemon-reload
-systemctl enable bluealsa-aplay
+systemctl enable --now bluealsa-aplay
 
 # Bluetooth udev script
 cat <<'EOF' > /usr/local/bin/bluetooth-udev
